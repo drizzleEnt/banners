@@ -1,0 +1,34 @@
+version: '3'
+
+volumes:
+  postgres_volume:
+  cache:
+    driver: local
+
+services:
+  banners:
+    image: postgres:14-alpine3.17
+    environment:
+      - "POSTGRES_DB=${PG_DATABASE_NAME}"
+      - "POSTGRES_USER=${PG_USER}"
+      - "POSTGRES_PASSWORD=${PG_PASSWORD}"
+    ports:
+      - "${PG_PORT}:5432"
+    volumes:
+      - postgres_volume:/var/lib/postgresql/data
+
+  migrator_banners:
+    build:
+      context: .
+      dockerfile: migrations.Dockerfile
+    restart: on-failure
+    environment:
+      DB_HOST: pg_chat
+  
+  redis:
+    image: redis:6.2-alpine
+    restart: always
+    ports:
+      - "${REDIS_PORT}:6379"
+    volumes:
+      - cache/data
