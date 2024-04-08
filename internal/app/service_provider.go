@@ -6,13 +6,19 @@ import (
 
 	"github.com/drizzleent/banners/internal/api"
 	"github.com/drizzleent/banners/internal/api/http/handler"
+	"github.com/drizzleent/banners/internal/api/http/handler/auth"
 	"github.com/drizzleent/banners/internal/config"
 	"github.com/drizzleent/banners/internal/config/env"
+	"github.com/drizzleent/banners/internal/service"
+	"github.com/drizzleent/banners/internal/service/banner"
 )
 
 type serviceProvider struct {
 	pgCfg   config.PGConfig
 	httpCfg config.HTTPConfig
+
+	bannerService service.BannerService
+	authService   service.AuthService
 
 	handler api.Handler
 }
@@ -46,9 +52,23 @@ func (s *serviceProvider) HTTPConfig() config.HTTPConfig {
 	return s.httpCfg
 }
 
+func (s *serviceProvider) BannerService(ctx context.Context) service.BannerService {
+	if nil == s.bannerService {
+		s.bannerService = banner.New()
+	}
+	return s.bannerService
+}
+
+func (s *serviceProvider) AuthService(ctx context.Context) service.AuthService {
+	if nil == s.authService {
+		s.authService = auth.New()
+	}
+	return s.authService
+}
+
 func (s *serviceProvider) Handler(ctx context.Context) api.Handler {
 	if nil == s.handler {
-		s.handler = handler.NewHandler()
+		s.handler = handler.NewHandler(s.BannerService(ctx), s.AuthService(ctx))
 	}
 
 	return s.handler
