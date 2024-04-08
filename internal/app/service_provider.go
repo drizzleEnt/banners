@@ -1,8 +1,11 @@
 package app
 
 import (
+	"context"
 	"log"
 
+	"github.com/drizzleent/banners/internal/api"
+	"github.com/drizzleent/banners/internal/api/http/handler"
 	"github.com/drizzleent/banners/internal/config"
 	"github.com/drizzleent/banners/internal/config/env"
 )
@@ -10,6 +13,8 @@ import (
 type serviceProvider struct {
 	pgCfg   config.PGConfig
 	httpCfg config.HTTPConfig
+
+	handler api.Handler
 }
 
 func newServiceProvider() *serviceProvider {
@@ -39,4 +44,12 @@ func (s *serviceProvider) HTTPConfig() config.HTTPConfig {
 	}
 
 	return s.httpCfg
+}
+
+func (s *serviceProvider) Handler(ctx context.Context) api.Handler {
+	if nil == s.handler {
+		s.handler = handler.NewHandler()
+	}
+
+	return s.handler
 }

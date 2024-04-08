@@ -71,7 +71,7 @@ func (a *App) initServiceProvider(_ context.Context) error {
 func (a *App) initHTTPServer(ctx context.Context) error {
 	a.httpServer = &http.Server{
 		Addr:           a.serviceProvider.HTTPConfig().Address(),
-		Handler:        nil,
+		Handler:        a.serviceProvider.Handler(ctx),
 		ReadTimeout:    10 * time.Second,
 		WriteTimeout:   10 * time.Second,
 		MaxHeaderBytes: 1 << 20,
