@@ -7,6 +7,7 @@ require (
 	github.com/georgysavva/scany v1.2.1
 	github.com/jackc/pgconn v1.14.3
 	github.com/jackc/pgx/v4 v4.18.3
+	github.com/julienschmidt/httprouter v1.3.0
 	github.com/pkg/errors v0.9.1
 	github.com/subosito/gotenv v1.6.0
 )
