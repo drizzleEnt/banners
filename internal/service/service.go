@@ -1,9 +1,13 @@
 package service
 
-import "context"
+import (
+	"context"
+
+	"github.com/drizzleent/banners/internal/model"
+)
 
 type BannerService interface {
-	GetAllBanners(context.Context) error
+	GetAllBanners(context.Context, *model.Specs) (*model.Banner, error)
 }
 
 type AuthService interface {

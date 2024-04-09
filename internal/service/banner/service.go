@@ -1,10 +1,16 @@
 package banner
 
-import "github.com/drizzleent/banners/internal/service"
+import (
+	"github.com/drizzleent/banners/internal/repository"
+	"github.com/drizzleent/banners/internal/service"
+)
 
 type bannerService struct {
+	repo repository.Repository
 }
 
-func New() service.BannerService {
-	return &bannerService{}
+func New(repo repository.Repository) service.BannerService {
+	return &bannerService{
+		repo: repo,
+	}
 }

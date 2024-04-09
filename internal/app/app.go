@@ -11,7 +11,7 @@ import (
 )
 
 type App struct {
-	serviceProvider *serviceProvider
+	ServiceProvider *serviceProvider
 
 	httpServer *http.Server
 }
@@ -64,14 +64,14 @@ func (a *App) initConfig(_ context.Context) error {
 }
 
 func (a *App) initServiceProvider(_ context.Context) error {
-	a.serviceProvider = newServiceProvider()
+	a.ServiceProvider = newServiceProvider()
 	return nil
 }
 
 func (a *App) initHTTPServer(ctx context.Context) error {
 	a.httpServer = &http.Server{
-		Addr:           a.serviceProvider.HTTPConfig().Address(),
-		Handler:        a.serviceProvider.Handler(ctx),
+		Addr:           a.ServiceProvider.HTTPConfig().Address(),
+		Handler:        a.ServiceProvider.Handler(ctx),
 		ReadTimeout:    10 * time.Second,
 		WriteTimeout:   10 * time.Second,
 		MaxHeaderBytes: 1 << 20,
@@ -81,7 +81,7 @@ func (a *App) initHTTPServer(ctx context.Context) error {
 }
 
 func (a *App) runHttpServer() error {
-	log.Printf("HTTP server running on: %s", a.serviceProvider.HTTPConfig().Address())
+	log.Printf("HTTP server running on: %s", a.ServiceProvider.HTTPConfig().Address())
 	err := a.httpServer.ListenAndServe()
 
 	if err != nil {

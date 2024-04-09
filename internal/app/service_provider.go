@@ -6,16 +6,24 @@ import (
 
 	"github.com/drizzleent/banners/internal/api"
 	"github.com/drizzleent/banners/internal/api/http/handler"
-	"github.com/drizzleent/banners/internal/api/http/handler/auth"
+	authSrv "github.com/drizzleent/banners/internal/api/http/handler/auth"
 	"github.com/drizzleent/banners/internal/config"
 	"github.com/drizzleent/banners/internal/config/env"
+	"github.com/drizzleent/banners/internal/repository"
+	bannerRepo "github.com/drizzleent/banners/internal/repository/banner"
 	"github.com/drizzleent/banners/internal/service"
-	"github.com/drizzleent/banners/internal/service/banner"
+	bannerSrv "github.com/drizzleent/banners/internal/service/banner"
+	"github.com/drizzleent/banners/pkg/client/db"
+	"github.com/drizzleent/banners/pkg/client/db/pg"
 )
 
 type serviceProvider struct {
 	pgCfg   config.PGConfig
 	httpCfg config.HTTPConfig
+
+	db db.Client
+
+	repository repository.Repository
 
 	bannerService service.BannerService
 	authService   service.AuthService
@@ -52,16 +60,42 @@ func (s *serviceProvider) HTTPConfig() config.HTTPConfig {
 	return s.httpCfg
 }
 
+func (s *serviceProvider) BDClient(ctx context.Context) db.Client {
+	if nil == s.db {
+		cl, err := pg.New(ctx, s.PGConfig().Address())
+		if err != nil {
+			log.Fatalf("Failed to create db client %s", err.Error())
+		}
+
+		err = cl.DB().Ping(ctx)
+		if err != nil {
+			log.Fatalf("Failed to ping db %s", err.Error())
+		}
+
+		s.db = cl
+	}
+
+	return s.db
+}
+
+func (s *serviceProvider) Repository(ctx context.Context) repository.Repository {
+	if nil == s.repository {
+		s.repository = bannerRepo.NewRepository(s.BDClient(ctx))
+	}
+
+	return s.repository
+}
+
 func (s *serviceProvider) BannerService(ctx context.Context) service.BannerService {
 	if nil == s.bannerService {
-		s.bannerService = banner.New()
+		s.bannerService = bannerSrv.New(s.Repository(ctx))
 	}
 	return s.bannerService
 }
 
 func (s *serviceProvider) AuthService(ctx context.Context) service.AuthService {
 	if nil == s.authService {
-		s.authService = auth.New()
+		s.authService = authSrv.New()
 	}
 	return s.authService
 }

@@ -3,7 +3,7 @@ module github.com/drizzleent/banners
 go 1.21.1
 
 require (
-	github.com/drizzleent/inHouseAd v0.0.0-20240314120125-b704ae5e0bfc
+	github.com/brianvoe/gofakeit/v6 v6.28.0
 	github.com/georgysavva/scany v1.2.1
 	github.com/jackc/pgconn v1.14.3
 	github.com/jackc/pgx/v4 v4.18.3
