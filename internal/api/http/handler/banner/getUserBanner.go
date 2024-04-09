@@ -50,5 +50,4 @@ func (h *bannerHandler) GetUserBanner(w http.ResponseWriter, r *http.Request, _ 
 	}
 
 	w.Write(res)
-	fmt.Println(res)
 }
