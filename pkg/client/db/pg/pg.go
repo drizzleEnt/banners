@@ -3,7 +3,7 @@ package pg
 import (
 	"context"
 
-	"github.com/drizzleent/inHouseAd/pkg/client/db"
+	"github.com/drizzleent/banners/pkg/client/db"
 	"github.com/georgysavva/scany/pgxscan"
 	"github.com/jackc/pgconn"
 	"github.com/jackc/pgx/v4"
