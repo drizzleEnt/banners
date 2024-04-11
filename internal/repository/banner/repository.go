@@ -53,8 +53,6 @@ func (r *repo) GetAllBanners(ctx context.Context, specs *model.Specs) (*model.Ba
 }
 
 func (r *repo) Create(ctx context.Context, banner *model.Banner) (int64, error) {
-	fmt.Println("repo.Create")
-	fmt.Println(banner.Tag)
 	query := fmt.Sprintf("INSERT INTO %s (%s, %s, %s, %s, %s, %s) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id",
 		bannerTable, titleColumn, textColumn, urlColumn, activeColumn, featureColumn, tagColumn)
 	q := db.Query{
@@ -77,6 +75,19 @@ func (r *repo) Update(context.Context, *model.Banner) error {
 	return nil
 }
 
-func (r *repo) Delete(context.Context, int64) error {
+func (r *repo) Delete(ctx context.Context, id int64) error {
+	query := fmt.Sprintf("DELETE FROM %s WHERE %s=$1", bannerTable, idColumn)
+
+	q := db.Query{
+		Name:     "repository.Delete",
+		QueryRaw: query,
+	}
+
+	args := []interface{}{id}
+
+	res, err := r.db.DB().ExecContext(ctx, q, args...)
+	if err != nil {
+		return fmt.Errorf("failed to Delete user: %v, tag: %v", err, res)
+	}
 	return nil
 }

@@ -2,6 +2,7 @@ package interceptor
 
 import (
 	"fmt"
+	"net/http"
 )
 
 const (
@@ -9,20 +10,20 @@ const (
 	adminToken = "admin_token"
 )
 
-func CheckToken(token string) error {
+func CheckToken(token string) (int, error) {
 	if token == userToken || token == adminToken {
-		return nil
+		return http.StatusOK, nil
 	}
-	return fmt.Errorf("пользователь не авторизован")
+	return http.StatusUnauthorized, fmt.Errorf("пользователь не авторизован")
 }
 
-func CheckAdminToken(token string) error {
+func CheckAdminToken(token string) (int, error) {
 	if token == adminToken {
-		return nil
+		return http.StatusOK, nil
 	}
 	if token == userToken {
-		return fmt.Errorf("пользователь не имеет доступа")
+		return http.StatusForbidden, fmt.Errorf("пользователь не имеет доступа")
 	}
 
-	return fmt.Errorf("пользователь не авторизован")
+	return http.StatusUnauthorized, fmt.Errorf("пользователь не авторизован")
 }

@@ -12,9 +12,9 @@ import (
 )
 
 func (h *bannerHandler) GetUserBanner(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
-	err := interceptor.CheckToken(r.Header.Get(tokenQuery))
+	httpStatus, err := interceptor.CheckToken(r.Header.Get(tokenQuery))
 	if err != nil {
-		api.NewErrorResponse(w, http.StatusBadRequest, err.Error())
+		api.NewErrorResponse(w, httpStatus, err.Error())
 		return
 	}
 
