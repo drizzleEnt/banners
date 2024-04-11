@@ -6,12 +6,12 @@ import (
 
 	"github.com/drizzleent/banners/internal/api"
 	"github.com/drizzleent/banners/internal/api/http/handler"
-	authSrv "github.com/drizzleent/banners/internal/api/http/handler/auth"
 	"github.com/drizzleent/banners/internal/config"
 	"github.com/drizzleent/banners/internal/config/env"
 	"github.com/drizzleent/banners/internal/repository"
 	bannerRepo "github.com/drizzleent/banners/internal/repository/banner"
 	"github.com/drizzleent/banners/internal/service"
+	"github.com/drizzleent/banners/internal/service/auth"
 	bannerSrv "github.com/drizzleent/banners/internal/service/banner"
 	"github.com/drizzleent/banners/pkg/client/db"
 	"github.com/drizzleent/banners/pkg/client/db/pg"
@@ -95,14 +95,14 @@ func (s *serviceProvider) BannerService(ctx context.Context) service.BannerServi
 
 func (s *serviceProvider) AuthService(ctx context.Context) service.AuthService {
 	if nil == s.authService {
-		s.authService = authSrv.New()
+		s.authService = auth.New()
 	}
 	return s.authService
 }
 
 func (s *serviceProvider) Handler(ctx context.Context) api.Handler {
 	if nil == s.handler {
-		s.handler = handler.NewHandler(s.BannerService(ctx), s.AuthService(ctx))
+		s.handler = handler.NewHandler(s.BannerService(ctx))
 	}
 
 	return s.handler
