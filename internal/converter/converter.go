@@ -1,6 +1,9 @@
 package converter
 
 import (
+	"encoding/json"
+	"io"
+	"net/http"
 	"strconv"
 
 	"github.com/drizzleent/banners/internal/model"
@@ -56,12 +59,18 @@ func FromReqToAdmin(feature string, tag string, limitQuery string, offsetQuery s
 	}, nil
 }
 
-func FromReqToBanner() *model.Banner {
+func FromReqToBanner(r *http.Request) (*model.Banner, int, error) {
 
-	return &model.Banner{
-		Title:  "",
-		Text:   "",
-		Url:    "",
-		Active: false,
+	body, err := io.ReadAll(r.Body)
+	if err != nil {
+		return nil, http.StatusBadRequest, err
 	}
+	var banner model.Banner
+
+	err = json.Unmarshal(body, &banner)
+	if err != nil {
+		return nil, http.StatusInternalServerError, err
+	}
+
+	return &banner, http.StatusOK, nil
 }

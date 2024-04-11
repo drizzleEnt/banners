@@ -52,8 +52,25 @@ func (r *repo) GetAllBanners(ctx context.Context, specs *model.Specs) (*model.Ba
 	return nil, nil
 }
 
-func (r *repo) Create(context.Context, *model.Banner) (int64, error) {
-	return 0, nil
+func (r *repo) Create(ctx context.Context, banner *model.Banner) (int64, error) {
+	fmt.Println("repo.Create")
+	fmt.Println(banner.Tag)
+	query := fmt.Sprintf("INSERT INTO %s (%s, %s, %s, %s, %s, %s) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id",
+		bannerTable, titleColumn, textColumn, urlColumn, activeColumn, featureColumn, tagColumn)
+	q := db.Query{
+		Name:     "repository.Create",
+		QueryRaw: query,
+	}
+
+	args := []interface{}{banner.Title, banner.Text, banner.Url, banner.Active, banner.Feature, banner.Tag}
+
+	var id int64
+	err := r.db.DB().QueryRowContext(ctx, q, args...).Scan(&id)
+
+	if err != nil {
+		return 0, err
+	}
+	return id, nil
 }
 
 func (r *repo) Update(context.Context, *model.Banner) error {

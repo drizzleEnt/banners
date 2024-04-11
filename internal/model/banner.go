@@ -10,6 +10,8 @@ type Banner struct {
 	Text      string `json:"text"`
 	Url       string `json:"url"`
 	Active    bool   `json:"use_active-version"`
+	Feature   int    `json:"feature_id"`
+	Tag       []int  `json:"tag_id"`
 	CreatedAt time.Time
 	UpdatedAt sql.NullTime
 }
