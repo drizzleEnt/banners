@@ -19,6 +19,7 @@ const (
 	urlColumn     = "url"
 	featureColumn = "feature_id"
 	tagColumn     = "tag_id"
+	activeColumn  = "active"
 )
 
 type repo struct {
@@ -31,10 +32,10 @@ func NewRepository(db db.Client) repository.Repository {
 	}
 }
 
-func (r *repo) GetUserBanner(ctx context.Context, specs *model.Specs) (*model.Banner, error) {
+func (r *repo) GetUserBanner(ctx context.Context, specs *model.Specs) (*model.UserBanner, error) {
 	var banner datamodel.Banner
 
-	query := fmt.Sprintf("SELECT %s, %s, %s FROM %s WHERE %s = $1 AND $2 = ANY(%s)", titleColumn, textColumn, urlColumn, bannerTable, featureColumn, tagColumn)
+	query := fmt.Sprintf("SELECT %s, %s, %s, %s FROM %s WHERE %s = $1 AND $2 = ANY(%s)", titleColumn, textColumn, urlColumn, activeColumn, bannerTable, featureColumn, tagColumn)
 
 	q := db.Query{
 		Name:     "repository.GetUserBanner",
@@ -43,6 +44,22 @@ func (r *repo) GetUserBanner(ctx context.Context, specs *model.Specs) (*model.Ba
 
 	args := []interface{}{specs.Feature, specs.Tag}
 
-	err := r.db.DB().QueryRowContext(ctx, q, args...).Scan(&banner.Title, &banner.Text, &banner.Url)
-	return conventer.ToModelFromRepo(banner), err
+	err := r.db.DB().QueryRowContext(ctx, q, args...).Scan(&banner.Title, &banner.Text, &banner.Url, &banner.Active)
+	return conventer.ToUserModelFromRepo(banner), err
+}
+
+func (r *repo) GetAllBanners(ctx context.Context, specs *model.Specs) (*model.Banner, error) {
+	return nil, nil
+}
+
+func (r *repo) Create(context.Context, *model.Banner) (int64, error) {
+	return 0, nil
+}
+
+func (r *repo) Update(context.Context, *model.Banner) error {
+	return nil
+}
+
+func (r *repo) Delete(context.Context, int64) error {
+	return nil
 }

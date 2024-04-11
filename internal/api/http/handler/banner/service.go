@@ -6,6 +6,8 @@ const (
 	tagIdQuery          = "tag_id"
 	featureIdQuery      = "feature_id"
 	useLastVersionQuery = "use_last_version"
+	limitQuery          = "limit"
+	offsetQuery         = "offset"
 	tokenQuery          = "token"
 )
 

@@ -6,6 +6,8 @@ CREATE TABLE banners(
     url varchar(255) not null,
     feature_id INTEGER NOT NULL,
     tag_id INTEGER[] NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT now(),
+    updated_at TIMESTAMP,
     last_version BOOLEAN NOT NULL DEFAULT TRUE,
     active BOOLEAN NOT NULL DEFAULT TRUE
 );

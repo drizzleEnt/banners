@@ -7,8 +7,19 @@ import (
 
 func ToModelFromRepo(banner datamodel.Banner) *model.Banner {
 	return &model.Banner{
+		Title:     banner.Title,
+		Text:      banner.Text,
+		Url:       banner.Url,
+		Active:    banner.Active,
+		CreatedAt: banner.CreatedAt,
+		UpdatedAt: banner.UpdatedAt,
+	}
+}
+
+func ToUserModelFromRepo(banner datamodel.Banner) *model.UserBanner {
+	return &model.UserBanner{
 		Title: banner.Title,
-		Text:  banner.Text,
+		Text:  banner.Title,
 		Url:   banner.Url,
 	}
 }

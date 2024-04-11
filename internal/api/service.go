@@ -7,23 +7,20 @@ import (
 )
 
 type Handler interface {
-	// GetUserBanner()
-	// GetAllBanners()
-	// CreateBanner()
-	// UpdateBanner()
-	// DeleteBanner()
 	http.Handler
-	AuthHandler
+	ControlHandler
 	BannerHandler
-}
-
-type AuthHandler interface {
+	Control(http.ResponseWriter, *http.Request, httprouter.Params)
 }
 
 type BannerHandler interface {
 	GetUserBanner(http.ResponseWriter, *http.Request, httprouter.Params)
 	GetAllBanners(http.ResponseWriter, *http.Request, httprouter.Params)
-	CreateBanner(http.ResponseWriter, *http.Request, httprouter.Params)
-	DeleteBanner(http.ResponseWriter, *http.Request, httprouter.Params)
-	UpdateBanner(http.ResponseWriter, *http.Request, httprouter.Params)
+	Create(http.ResponseWriter, *http.Request, httprouter.Params)
+	Delete(http.ResponseWriter, *http.Request, httprouter.Params)
+	Update(http.ResponseWriter, *http.Request, httprouter.Params)
+}
+
+type ControlHandler interface {
+	Control(http.ResponseWriter, *http.Request, httprouter.Params)
 }
