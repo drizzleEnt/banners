@@ -33,20 +33,20 @@ func FromReqToUser(feature string, tag string, versionStr string) (*model.Specs,
 func FromReqToAdmin(feature string, tag string, limitQuery string, offsetQuery string) (*model.Specs, error) {
 	feature_id, err := strconv.Atoi(feature)
 	if err != nil {
-		return nil, err
+		feature_id = 0
 	}
 
 	tag_id, err := strconv.Atoi(tag)
 	if err != nil {
-		return nil, err
+		tag_id = 0
 	}
 
-	limit, err := strconv.Atoi(feature)
+	limit, err := strconv.Atoi(limitQuery)
 	if err != nil {
 		limit = 0
 	}
 
-	offset, err := strconv.Atoi(tag)
+	offset, err := strconv.Atoi(offsetQuery)
 	if err != nil {
 		offset = 0
 	}

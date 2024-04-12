@@ -21,6 +21,7 @@ const (
 	featureColumn   = "feature_id"
 	tagColumn       = "tag_id"
 	activeColumn    = "active"
+	createdColumn   = "created_at"
 	updatedAtColumn = "updated_at"
 )
 
@@ -52,8 +53,32 @@ func (r *repo) GetUserBanner(ctx context.Context, specs *model.Specs) (*model.Us
 	return conventer.ToUserModelFromRepo(banner), err
 }
 
-func (r *repo) GetAllBanners(ctx context.Context, specs *model.Specs) (*model.Banner, error) {
-	return nil, nil
+func (r *repo) GetAllBanners(ctx context.Context, specs *model.Specs) (*[]model.Banner, error) {
+
+	query := fmt.Sprintf("SELECT %s, %s, %s, %s, %s, %s, %s, %s, %s FROM %s WHERE %s = $1 OR $2 = ANY(%s) LIMIT $3 OFFSET $4",
+		idColumn, titleColumn, textColumn, urlColumn, activeColumn, createdColumn, updatedAtColumn, tagColumn, featureColumn, bannerTable, featureColumn, tagColumn)
+
+	q := db.Query{
+		Name:     "repository.GetAllBanners",
+		QueryRaw: query,
+	}
+	var limit interface{}
+
+	if specs.Limit != 0 {
+		limit = specs.Limit
+	} else {
+		limit = nil
+	}
+
+	args := []interface{}{specs.Feature, specs.Tag, limit, specs.Offset}
+
+	res := make([]datamodel.Banner, 1)
+
+	err := r.db.DB().ScanAllContext(ctx, &res, q, args...)
+	if err != nil {
+		return nil, err
+	}
+	return conventer.FromRepoToModelSlice(res), nil
 }
 
 func (r *repo) Create(ctx context.Context, banner *model.Banner) (int64, error) {

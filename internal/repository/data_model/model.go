@@ -6,6 +6,7 @@ import (
 )
 
 type Banner struct {
+	ID        int    `db:"id"`
 	Title     string `db:"title"`
 	Text      string `db:"text"`
 	Url       string `db:"url"`
@@ -15,11 +16,6 @@ type Banner struct {
 	Tag       []int        `db:"tag_id"`
 	CreatedAt time.Time    `db:"created_at"`
 	UpdatedAt sql.NullTime `db:"updated_at"`
-}
-
-type Activity struct {
-	IsActive bool `db:"active"`
-	IsValid  bool
 }
 
 type UserBanner struct {

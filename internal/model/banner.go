@@ -6,6 +6,7 @@ import (
 )
 
 type Banner struct {
+	ID        int
 	Title     string `json:"title,omitempty"`
 	Text      string `json:"text,omitempty"`
 	Url       string `json:"url,omitempty"`
