@@ -13,24 +13,11 @@ import (
 )
 
 func (h *bannerHandler) GetUserBanner(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
-	httpStatus, err := interceptor.CheckToken(r.Header.Get(tokenQuery))
+	httpStatus, token, err := interceptor.CheckToken(r.Header.Get(tokenQuery))
 	if err != nil {
 		api.NewErrorResponse(w, httpStatus, err.Error())
 		return
 	}
-
-	// feature_id := r.URL.Query().Get(featureIdQuery)
-	// if len(feature_id) == 0 {
-	// 	api.NewErrorResponse(w, http.StatusBadRequest, "Некорректные данные feature id requared")
-	// 	return
-	// }
-
-	// tag_id := r.URL.Query().Get(tagIdQuery)
-	// if len(tag_id) == 0 {
-	// 	api.NewErrorResponse(w, http.StatusBadRequest, "Некорректные данные tag id requared")
-	// 	return
-	// }
-	// useLastVersion := r.URL.Query().Get(useLastVersionQuery)
 
 	specs, err := converter.FromReqToUser(
 		r.URL.Query().Get(featureIdQuery),
@@ -46,6 +33,11 @@ func (h *bannerHandler) GetUserBanner(w http.ResponseWriter, r *http.Request, _ 
 	if err != nil {
 		api.NewErrorResponse(w, http.StatusInternalServerError, err.Error())
 		return
+	}
+
+	if _, err = interceptor.CheckAdminToken(token); err != nil {
+		logrus.Print("Получение баннера для пользователя")
+		w.Write([]byte("all banners are disabled according to the specified parameters"))
 	}
 
 	res, err := json.Marshal(banner)
