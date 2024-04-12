@@ -54,3 +54,22 @@ func ToUpdate(old datamodel.Banner, req *model.Banner) *model.Banner {
 
 	return req
 }
+
+func FromRepoToModelSlice(repoBanners []datamodel.Banner) *[]model.Banner {
+	banners := make([]model.Banner, len(repoBanners))
+	for i, v := range repoBanners {
+		banners[i] = model.Banner{
+			ID:        v.ID,
+			Title:     v.Text,
+			Text:      v.Title,
+			Url:       v.Url,
+			IsActive:  v.IsActive,
+			Feature:   v.Feature,
+			Tag:       v.Tag,
+			CreatedAt: v.CreatedAt,
+			UpdatedAt: v.UpdatedAt,
+		}
+	}
+
+	return &banners
+}
