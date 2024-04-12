@@ -19,9 +19,10 @@ func ToModelFromRepo(banner datamodel.Banner) *model.Banner {
 
 func ToUserModelFromRepo(banner datamodel.Banner) *model.UserBanner {
 	return &model.UserBanner{
-		Title: banner.Title,
-		Text:  banner.Title,
-		Url:   banner.Url,
+		Title:    banner.Title,
+		Text:     banner.Text,
+		Url:      banner.Url,
+		IsActive: banner.IsActive,
 	}
 }
 
@@ -47,8 +48,8 @@ func ToUpdate(old datamodel.Banner, req *model.Banner) *model.Banner {
 		req.Tag = old.Tag
 	}
 
-	if req.IsValid {
-
+	if !req.IsValid {
+		req.IsActive = old.IsActive
 	}
 
 	return req

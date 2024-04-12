@@ -75,7 +75,7 @@ func FromReqToBanner(r *http.Request) (*model.Banner, int, error) {
 	}
 
 	if strings.Contains(string(body), "is_active") {
-		banner.IsValid = false
+		banner.IsValid = true
 	}
 
 	return &banner, http.StatusOK, nil

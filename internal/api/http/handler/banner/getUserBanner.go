@@ -9,6 +9,7 @@ import (
 	"github.com/drizzleent/banners/internal/converter"
 	"github.com/drizzleent/banners/internal/interceptor"
 	"github.com/julienschmidt/httprouter"
+	"github.com/sirupsen/logrus"
 )
 
 func (h *bannerHandler) GetUserBanner(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
@@ -52,6 +53,6 @@ func (h *bannerHandler) GetUserBanner(w http.ResponseWriter, r *http.Request, _ 
 		api.NewErrorResponse(w, http.StatusInternalServerError, err.Error())
 		return
 	}
-
+	logrus.Print("Получение баннера для пользователя")
 	w.Write(res)
 }

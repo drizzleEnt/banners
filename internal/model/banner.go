@@ -24,7 +24,7 @@ type UserBanner struct {
 	Feature  int    `json:"feature_id,omitempty"`
 	Tag      []int  `json:"tag_id,omitempty"`
 	IsActive bool   `json:"is_active,omitempty"`
-	IsValid  bool   `json:"is_valid"`
+	IsValid  bool
 }
 
 type Specs struct {

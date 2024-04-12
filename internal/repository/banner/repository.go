@@ -48,6 +48,7 @@ func (r *repo) GetUserBanner(ctx context.Context, specs *model.Specs) (*model.Us
 	args := []interface{}{specs.Feature, specs.Tag}
 
 	err := r.db.DB().QueryRowContext(ctx, q, args...).Scan(&banner.Title, &banner.Text, &banner.Url, &banner.IsActive)
+
 	return conventer.ToUserModelFromRepo(banner), err
 }
 
