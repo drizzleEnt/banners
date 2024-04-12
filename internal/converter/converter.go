@@ -5,6 +5,7 @@ import (
 	"io"
 	"net/http"
 	"strconv"
+	"strings"
 
 	"github.com/drizzleent/banners/internal/model"
 )
@@ -61,6 +62,26 @@ func FromReqToAdmin(feature string, tag string, limitQuery string, offsetQuery s
 
 func FromReqToBanner(r *http.Request) (*model.Banner, int, error) {
 
+	body, err := io.ReadAll(r.Body)
+	if err != nil {
+		return nil, http.StatusBadRequest, err
+	}
+	var banner model.Banner
+
+	err = json.Unmarshal(body, &banner)
+
+	if err != nil {
+		return nil, http.StatusInternalServerError, err
+	}
+
+	if strings.Contains(string(body), "is_active") {
+		banner.IsValid = false
+	}
+
+	return &banner, http.StatusOK, nil
+}
+
+func FromReqToUpdateBanner(r *http.Request) (*model.Banner, int, error) {
 	body, err := io.ReadAll(r.Body)
 	if err != nil {
 		return nil, http.StatusBadRequest, err

@@ -6,21 +6,25 @@ import (
 )
 
 type Banner struct {
-	Title     string `json:"title"`
-	Text      string `json:"text"`
-	Url       string `json:"url"`
-	Active    bool   `json:"use_active-version"`
-	Feature   int    `json:"feature_id"`
-	Tag       []int  `json:"tag_id"`
+	Title     string `json:"title,omitempty"`
+	Text      string `json:"text,omitempty"`
+	Url       string `json:"url,omitempty"`
+	IsActive  bool   `json:"is_active,omitempty"`
+	IsValid   bool   `json:"is_valid"`
+	Feature   int    `json:"feature_id,omitempty"`
+	Tag       []int  `json:"tag_id,omitempty"`
 	CreatedAt time.Time
 	UpdatedAt sql.NullTime
 }
 
 type UserBanner struct {
-	Title  string `json:"title"`
-	Text   string `json:"text"`
-	Url    string `json:"url"`
-	Active bool   `json:"use_active-version"`
+	Title    string `json:"title,omitempty"`
+	Text     string `json:"text,omitempty"`
+	Url      string `json:"url,omitempty"`
+	Feature  int    `json:"feature_id,omitempty"`
+	Tag      []int  `json:"tag_id,omitempty"`
+	IsActive bool   `json:"is_active,omitempty"`
+	IsValid  bool   `json:"is_valid"`
 }
 
 type Specs struct {

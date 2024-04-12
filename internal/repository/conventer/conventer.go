@@ -10,7 +10,8 @@ func ToModelFromRepo(banner datamodel.Banner) *model.Banner {
 		Title:     banner.Title,
 		Text:      banner.Text,
 		Url:       banner.Url,
-		Active:    banner.Active,
+		IsActive:  banner.IsActive,
+		IsValid:   banner.IsValid,
 		CreatedAt: banner.CreatedAt,
 		UpdatedAt: banner.UpdatedAt,
 	}
@@ -22,4 +23,33 @@ func ToUserModelFromRepo(banner datamodel.Banner) *model.UserBanner {
 		Text:  banner.Title,
 		Url:   banner.Url,
 	}
+}
+
+func ToUpdate(old datamodel.Banner, req *model.Banner) *model.Banner {
+
+	if req.Title == "" {
+		req.Title = old.Title
+	}
+
+	if req.Text == "" {
+		req.Text = old.Text
+	}
+
+	if req.Url == "" {
+		req.Url = old.Url
+	}
+
+	if req.Feature == 0 {
+		req.Feature = old.Feature
+	}
+
+	if len(req.Tag) == 0 {
+		req.Tag = old.Tag
+	}
+
+	if req.IsValid {
+
+	}
+
+	return req
 }

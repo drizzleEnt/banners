@@ -13,7 +13,7 @@ func (s *bannerService) GetUserBanner(ctx context.Context, specs *model.Specs) (
 		return nil, err
 	}
 
-	if !res.Active {
+	if !res.IsActive {
 		return nil, nil
 	}
 	return res, nil

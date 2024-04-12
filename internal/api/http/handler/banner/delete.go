@@ -10,7 +10,7 @@ import (
 )
 
 func (h *bannerHandler) Delete(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-	id, err := strconv.Atoi(ps.ByName("id"))
+	id, err := strconv.Atoi(ps.ByName(idQuery))
 	if err != nil {
 		api.NewErrorResponse(w, http.StatusBadRequest, err.Error())
 		return

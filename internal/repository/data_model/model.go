@@ -6,12 +6,20 @@ import (
 )
 
 type Banner struct {
-	Title     string       `db:"title"`
-	Text      string       `db:"text"`
-	Url       string       `db:"url"`
-	Active    bool         `db:"active"`
+	Title     string `db:"title"`
+	Text      string `db:"text"`
+	Url       string `db:"url"`
+	IsActive  bool   `db:"active"`
+	IsValid   bool
+	Feature   int          `db:"feature_id"`
+	Tag       []int        `db:"tag_id"`
 	CreatedAt time.Time    `db:"created_at"`
 	UpdatedAt sql.NullTime `db:"updated_at"`
+}
+
+type Activity struct {
+	IsActive bool `db:"active"`
+	IsValid  bool
 }
 
 type UserBanner struct {
