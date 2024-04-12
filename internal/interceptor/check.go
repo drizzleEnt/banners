@@ -10,11 +10,11 @@ const (
 	adminToken = "admin_token"
 )
 
-func CheckToken(token string) (int, error) {
+func CheckToken(token string) (int, string, error) {
 	if token == userToken || token == adminToken {
-		return http.StatusOK, nil
+		return http.StatusOK, token, nil
 	}
-	return http.StatusUnauthorized, fmt.Errorf("пользователь не авторизован")
+	return http.StatusUnauthorized, "", fmt.Errorf("пользователь не авторизован")
 }
 
 func CheckAdminToken(token string) (int, error) {
