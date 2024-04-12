@@ -9,12 +9,13 @@ import (
 	"github.com/drizzleent/banners/internal/converter"
 	"github.com/drizzleent/banners/internal/interceptor"
 	"github.com/julienschmidt/httprouter"
+	"github.com/sirupsen/logrus"
 )
 
 func (h *bannerHandler) GetUserBanner(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
-	err := interceptor.CheckToken(r.Header.Get(tokenQuery))
+	httpStatus, err := interceptor.CheckToken(r.Header.Get(tokenQuery))
 	if err != nil {
-		api.NewErrorResponse(w, http.StatusBadRequest, err.Error())
+		api.NewErrorResponse(w, httpStatus, err.Error())
 		return
 	}
 
@@ -52,6 +53,6 @@ func (h *bannerHandler) GetUserBanner(w http.ResponseWriter, r *http.Request, _ 
 		api.NewErrorResponse(w, http.StatusInternalServerError, err.Error())
 		return
 	}
-
+	logrus.Print("Получение баннера для пользователя")
 	w.Write(res)
 }

@@ -19,9 +19,9 @@ func New(bh api.BannerHandler) *controlHandler {
 }
 
 func (h *controlHandler) Control(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
-	err := interceptor.CheckAdminToken(r.Header.Get("token"))
+	httpStatus, err := interceptor.CheckAdminToken(r.Header.Get("token"))
 	if err != nil {
-		api.NewErrorResponse(w, http.StatusBadRequest, err.Error())
+		api.NewErrorResponse(w, httpStatus, err.Error())
 		return
 	}
 
