@@ -1,24 +1,38 @@
 version: '3'
 
+
 volumes:
   postgres_volume:
 
 services:
-  banners:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: ps-app
+    ports:
+      - "${HTTP_PORT}:5000"
+    depends_on:
+      - pg_banners
+  
+  pg_banners:
     image: postgres:14-alpine3.17
+    container_name: ps-psql
+    ports:
+      - "${PG_PORT}:5432"
     environment:
       - "POSTGRES_DB=${PG_DATABASE_NAME}"
       - "POSTGRES_USER=${PG_USER}"
       - "POSTGRES_PASSWORD=${PG_PASSWORD}"
-    ports:
-      - "${PG_PORT}:5432"
     volumes:
       - postgres_volume:/var/lib/postgresql/data
-
-  migrator_banners:
+  
+  migrator_pg:
+    container_name: ps-psqlMigrator
     build:
       context: .
       dockerfile: migrations.Dockerfile
     restart: on-failure
     environment:
-      DB_HOST: pg_chat
+      DB_HOST: pg_banners
+  

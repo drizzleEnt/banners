@@ -15,3 +15,6 @@ local-migration-up:
 
 local-migration-down:
 	goose -dir ${LOCAL_MIGRATION_DIR} postgres ${LOCAL_MIGRATION_DSN} down -v
+
+docker-build-and-run:
+	docker-compose up --build -d
